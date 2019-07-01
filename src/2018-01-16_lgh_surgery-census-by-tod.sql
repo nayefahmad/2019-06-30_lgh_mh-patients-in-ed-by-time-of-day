@@ -135,24 +135,28 @@ end;
 ----------------------------------------------
 /***** create time table *****/
 ----------------------------------------------
-SELECT distinct ROW_NUMBER() OVER(ORDER BY [Time24Hr]) AS Row,cast([Time24Hr] as time) as [Time24Hr]
+drop table if exists #time; 
+SELECT ROW_NUMBER() OVER(ORDER BY [Time24Hr]) AS Row, cast([Time24Hr] as time) as [Time24Hr]
   into #time
   FROM [ADTCMart].[dim].[Time]
   where right([Time24Hr],2)='01'
  
---select * from #time; 
+-- select * from [ADTCMart].[dim].[Time]
+-- select * from #time; 
 
 ----------------------------------------------
 /***** create date table *****/
 ----------------------------------------------
-SELECT distinct ROW_NUMBER() OVER(ORDER BY shortdate) AS Row,
-	cast(shortdate as date) as shortdate
+drop table if exists #date; 
+SELECT ROW_NUMBER() OVER(ORDER BY shortdate) AS Row
+	, cast(shortdate as date) as shortdate
 into #date
 FROM [ADTCMart].[dim].[Date]
 where cast(shortdate as date) between @startdate and @enddate
 order by shortdate; 
 
-select * from #date order by shortdate; 
+-- select * from [ADTCMart].[dim].[Date]
+-- select * from #date order by shortdate; 
 
 
 ----------------------------------------------
